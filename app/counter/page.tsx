@@ -1,9 +1,8 @@
-import { createClient } from '@/lib/supabase/server'
-import { CounterDisplay } from './counter-display'
-
+import { createClient } from "@/lib/supabase/server";
+import { CounterDisplay } from "./counter-display";
 
 export default async function CounterPage() {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
   const { data, error } = await supabase
     .from("counter")
@@ -14,5 +13,5 @@ export default async function CounterPage() {
     return <p>Failed to load counter</p>;
   }
 
-  return <CounterDisplay value={data.value} />
+  return <CounterDisplay value={data.value} />;
 }

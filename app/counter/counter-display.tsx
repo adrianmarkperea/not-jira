@@ -1,7 +1,6 @@
-"use client"
+"use client";
 
-import { increment, decrement } from '@/actions/counter'
-
+import { increment, decrement } from "@/actions/counter";
 
 export function CounterDisplay({ value }: { value: number }) {
   return (
@@ -10,5 +9,5 @@ export function CounterDisplay({ value }: { value: number }) {
       <button onClick={() => decrement()}>Subtract</button>
       <button onClick={() => increment()}>Add</button>
     </div>
-  )
+  );
 }

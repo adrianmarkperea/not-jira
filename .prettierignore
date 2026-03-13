@@ -1,0 +1,16 @@
+# dependencies
+node_modules/
+
+# next.js
+.next/
+out/
+build/
+
+# generated
+pnpm-lock.yaml
+next-env.d.ts
+*.tsbuildinfo
+lib/database.types.ts
+
+# coverage
+coverage/
