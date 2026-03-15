@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Not JIRA
 
 ## Getting Started
 
-First, run the development server:
+1. Install [pnpm](https://pnpm.io/installation) and [docker](https://docs.docker.com/desktop/setup/install/mac-install/)
+2. Run `pnpm install` && `pnpm exec playwright install`
+3. Run `pnpx supabase start`. Take note the local URL and publish key and update. Make a copy of `.env.example`, save it as `.env.local`, and input the required values.
+4. Run `pnpm run dev`
+5. Access the website via `http://localhost:3000`
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Coding Standards
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Use `pnpm run lint` to lint
+2. Use `pnpm run format` to format
+3. Use `pnpm run test` to run component tests
+4. Use `pnpm run test:e2e` to run end-to-end tests.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Running end-to-end tests against production build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To run end-to-end tests in an environment similar to production, you need to build the application locally:
 
-## Learn More
+1. Run `pnpm run build` to build the package
+2. Run `pnpm run start` to start the production server
+3. Run `pnpx supabase db reset` to make sure the DB is in a clean state
 
-To learn more about Next.js, take a look at the following resources:
+## Architecture
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Front-end: Next.js
+- Back-end: Supabase
+- Component Testing: Vitest
+- E2E Testing: Playwright
