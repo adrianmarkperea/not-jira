@@ -49,6 +49,39 @@ export type Database = {
         };
         Relationships: [];
       };
+      issues: {
+        Row: {
+          id: string;
+          title: string;
+          description: string | null;
+          column_id: string;
+          position: number;
+          user_id: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          title: string;
+          description?: string | null;
+          column_id: string;
+          position?: number;
+          user_id: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          title?: string;
+          description?: string | null;
+          column_id?: string;
+          position?: number;
+          user_id?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       [_ in never]: never;
@@ -193,3 +226,6 @@ export const Constants = {
     Enums: {},
   },
 } as const;
+
+export const COLUMN_IDS = ['To-do', 'Next', 'In Progress', 'Delegated', 'Blocked', 'Done'] as const;
+export type ColumnId = typeof COLUMN_IDS[number];

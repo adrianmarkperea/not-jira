@@ -2,10 +2,12 @@ import { cn } from "@/lib/utils";
 
 export function Card({
   className,
+  ref,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
+}: React.ComponentPropsWithRef<'div'>) {
   return (
     <div
+      ref={ref}
       className={cn(
         "rounded-lg border border-foreground/10 bg-background shadow-sm",
         className,
