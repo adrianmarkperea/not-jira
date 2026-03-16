@@ -4,7 +4,7 @@ export function Card({
   className,
   ref,
   ...props
-}: React.ComponentPropsWithRef<'div'>) {
+}: React.ComponentPropsWithRef<"div">) {
   return (
     <div
       ref={ref}

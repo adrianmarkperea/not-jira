@@ -227,5 +227,12 @@ export const Constants = {
   },
 } as const;
 
-export const COLUMN_IDS = ['To-do', 'Next', 'In Progress', 'Delegated', 'Blocked', 'Done'] as const;
-export type ColumnId = typeof COLUMN_IDS[number];
+export const COLUMN_IDS = [
+  "To-do",
+  "Next",
+  "In Progress",
+  "Delegated",
+  "Blocked",
+  "Done",
+] as const;
+export type ColumnId = (typeof COLUMN_IDS)[number];

@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import {
   DndContext,
   DragEndEvent,
@@ -12,21 +12,23 @@ import {
   useSensor,
   useSensors,
   closestCorners,
-} from '@dnd-kit/core';
-import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import { Tables, ColumnId, COLUMN_IDS } from '@/lib/database.types';
-import { KanbanColumn } from './column';
-import { KanbanCard } from './card';
-import { updateIssuePosition } from '@/actions/issues';
+} from "@dnd-kit/core";
+import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+import { Tables, ColumnId, COLUMN_IDS } from "@/lib/database.types";
+import { KanbanColumn } from "./column";
+import { KanbanCard } from "./card";
+import { updateIssuePosition } from "@/actions/issues";
 
 interface KanbanBoardProps {
-  initialIssues: Tables<'issues'>[];
+  initialIssues: Tables<"issues">[];
 }
 
-type ColumnMap = Record<ColumnId, Tables<'issues'>[]>;
+type ColumnMap = Record<ColumnId, Tables<"issues">[]>;
 
-function groupByColumn(issues: Tables<'issues'>[]): ColumnMap {
-  const map = Object.fromEntries(COLUMN_IDS.map((id) => [id, []])) as unknown as ColumnMap;
+function groupByColumn(issues: Tables<"issues">[]): ColumnMap {
+  const map = Object.fromEntries(
+    COLUMN_IDS.map((id) => [id, []]),
+  ) as unknown as ColumnMap;
   for (const issue of issues) {
     const col = issue.column_id as ColumnId;
     if (map[col]) {
@@ -39,7 +41,10 @@ function groupByColumn(issues: Tables<'issues'>[]): ColumnMap {
   return map;
 }
 
-function findColumnOfIssue(columns: ColumnMap, issueId: string): ColumnId | null {
+function findColumnOfIssue(
+  columns: ColumnMap,
+  issueId: string,
+): ColumnId | null {
   for (const col of COLUMN_IDS) {
     if (columns[col].some((i) => i.id === issueId)) return col;
   }
@@ -47,12 +52,16 @@ function findColumnOfIssue(columns: ColumnMap, issueId: string): ColumnId | null
 }
 
 export function KanbanBoard({ initialIssues }: KanbanBoardProps) {
-  const [columns, setColumns] = useState<ColumnMap>(() => groupByColumn(initialIssues));
-  const [activeIssue, setActiveIssue] = useState<Tables<'issues'> | null>(null);
+  const [columns, setColumns] = useState<ColumnMap>(() =>
+    groupByColumn(initialIssues),
+  );
+  const [activeIssue, setActiveIssue] = useState<Tables<"issues"> | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
   );
 
   function onDragStart({ active }: DragStartEvent) {
@@ -115,13 +124,20 @@ export function KanbanBoard({ initialIssues }: KanbanBoardProps) {
       const oldIndex = items.findIndex((i) => i.id === activeId);
       const newIndex = items.findIndex((i) => i.id === overId);
       if (oldIndex !== newIndex) {
-        newColumns = { ...columns, [sourceCol]: arrayMove(items, oldIndex, newIndex) };
+        newColumns = {
+          ...columns,
+          [sourceCol]: arrayMove(items, oldIndex, newIndex),
+        };
         setColumns(newColumns);
       }
     }
 
     const destItems = newColumns[destCol];
-    updateIssuePosition(activeId, destCol, destItems.map((i) => i.id));
+    updateIssuePosition(
+      activeId,
+      destCol,
+      destItems.map((i) => i.id),
+    );
   }
 
   return (
