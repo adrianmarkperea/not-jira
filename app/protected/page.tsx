@@ -1,12 +1,12 @@
-import { createClient } from '@/lib/supabase/server';
-import { KanbanBoard } from '@/components/kanban/board';
+import { createClient } from "@/lib/supabase/server";
+import { KanbanBoard } from "@/components/kanban/board";
 
 export default async function ProtectedPage() {
   const supabase = await createClient();
   const { data: issues } = await supabase
-    .from('issues')
-    .select('*')
-    .order('position');
+    .from("issues")
+    .select("*")
+    .order("position");
 
   return (
     <div className="flex flex-col gap-4 w-full">
