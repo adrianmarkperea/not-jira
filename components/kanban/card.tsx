@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { Card } from '@/components/ui/card';
-import { Tables } from '@/lib/database.types';
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { Card } from "@/components/ui/card";
+import { Tables } from "@/lib/database.types";
 
 interface KanbanCardProps {
-  issue: Tables<'issues'>;
+  issue: Tables<"issues">;
 }
 
 export function KanbanCard({ issue }: KanbanCardProps) {
