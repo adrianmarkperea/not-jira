@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useOptimistic } from "react";
 import {
   DndContext,
   DragEndEvent,
@@ -17,7 +17,7 @@ import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { Tables, ColumnId, COLUMN_IDS } from "@/lib/database.types";
 import { KanbanColumn } from "./column";
 import { KanbanCard } from "./card";
-import { updateIssuePosition } from "@/actions/issues";
+import { updateIssuePosition, createIssue } from "@/actions/issues";
 
 interface KanbanBoardProps {
   initialIssues: Tables<"issues">[];
@@ -56,6 +56,35 @@ export function KanbanBoard({ initialIssues }: KanbanBoardProps) {
     groupByColumn(initialIssues),
   );
   const [activeIssue, setActiveIssue] = useState<Tables<"issues"> | null>(null);
+  const [optimisticColumns, addOptimistic] = useOptimistic(
+    columns,
+    (
+      state,
+      { columnId, issue }: { columnId: ColumnId; issue: Tables<"issues"> },
+    ) => ({
+      ...state,
+      [columnId]: [...state[columnId], issue],
+    }),
+  );
+
+  useEffect(() => {
+    setColumns(groupByColumn(initialIssues));
+  }, [initialIssues]);
+
+  async function handleAddIssue(title: string, columnId: ColumnId) {
+    const tempIssue: Tables<"issues"> = {
+      id: crypto.randomUUID(),
+      title,
+      column_id: columnId,
+      position: columns[columnId].length + 1,
+      user_id: "",
+      description: null,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+    addOptimistic({ columnId, issue: tempIssue });
+    await createIssue(title, columnId, columns[columnId].length + 1);
+  }
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -150,7 +179,12 @@ export function KanbanBoard({ initialIssues }: KanbanBoardProps) {
     >
       <div className="flex gap-4 overflow-x-auto pb-4">
         {COLUMN_IDS.map((colId) => (
-          <KanbanColumn key={colId} columnId={colId} issues={columns[colId]} />
+          <KanbanColumn
+            key={colId}
+            columnId={colId}
+            issues={optimisticColumns[colId]}
+            onAddIssue={(title) => handleAddIssue(title, colId)}
+          />
         ))}
       </div>
       <DragOverlay>

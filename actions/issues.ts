@@ -35,3 +35,29 @@ export async function updateIssuePosition(
 
   revalidatePath("/protected");
 }
+
+export async function createIssue(
+  title: string,
+  columnId: ColumnId,
+  position: number,
+): Promise<void> {
+  if (!COLUMN_IDS.includes(columnId)) {
+    throw new Error(`Invalid column: ${columnId}`);
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) throw new Error("Not authenticated");
+
+  await supabase.from("issues").insert({
+    title,
+    column_id: columnId,
+    position,
+    user_id: user.id,
+  });
+
+  revalidatePath("/protected");
+}
