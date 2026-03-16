@@ -11,7 +11,8 @@ import {
   KeyboardSensor,
   useSensor,
   useSensors,
-  closestCorners,
+  pointerWithin,
+  closestCenter,
 } from "@dnd-kit/core";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { Tables, ColumnId, COLUMN_IDS } from "@/lib/database.types";
@@ -173,7 +174,10 @@ export function KanbanBoard({ initialIssues }: KanbanBoardProps) {
     <DndContext
       id="kanban-board"
       sensors={sensors}
-      collisionDetection={closestCorners}
+      collisionDetection={(args) => {
+        const over = pointerWithin(args);
+        return over.length > 0 ? over : closestCenter(args);
+      }}
       onDragStart={onDragStart}
       onDragOver={onDragOver}
       onDragEnd={onDragEnd}
@@ -188,7 +192,12 @@ export function KanbanBoard({ initialIssues }: KanbanBoardProps) {
           />
         ))}
       </div>
-      <DragOverlay>
+      <DragOverlay
+        dropAnimation={{
+          duration: 200,
+          easing: "cubic-bezier(0.18, 0.67, 0.6, 1.22)",
+        }}
+      >
         {activeIssue ? <KanbanCard issue={activeIssue} /> : null}
       </DragOverlay>
     </DndContext>
